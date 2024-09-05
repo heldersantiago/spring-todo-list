@@ -1,31 +1,24 @@
 package com.nexus.entities;
 
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Tolerate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 
 @Getter
 @Setter
 @ToString
 @Entity
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
-public class User {
+@Table(name = "categories", uniqueConstraints = {@UniqueConstraint(columnNames = "title")})
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @NotNull(message = "name can not be null")
-    private String name;
-    @NotNull(message = "email can not be null")
-    @Email(message = "insert a valid email")
-    private String email;
-    @NotNull(message = "password can not be null")
-    private String password;
+    private String title;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -33,4 +26,11 @@ public class User {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = true, updatable = true)
     private java.sql.Timestamp updatedAt;
+
+    public Category(String title) {
+        this.title = title;
+    }
+
+    public Category() {
+    }
 }

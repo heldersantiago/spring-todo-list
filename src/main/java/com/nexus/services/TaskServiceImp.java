@@ -3,6 +3,7 @@ package com.nexus.services;
 import com.nexus.entities.Task;
 import com.nexus.interfaces.TaskService;
 import com.nexus.repositories.TaskRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +30,28 @@ public class TaskServiceImp implements TaskService {
     }
 
     @Override
-    public Task updateTask(Long id, Task task) {
-        Optional<Task> task_ = taskRepository.findById(id);
-        return task_.orElse(null);
+    public Task updateTask(Long id, Task taskDTO) {
+        return taskRepository.findById(id).map(task -> {
+            if (taskDTO.getTitle() != null) {
+                task.setTitle(taskDTO.getTitle());
+            }
+
+            if (taskDTO.getDescription() != null) {
+                task.setDescription(taskDTO.getDescription());
+            }
+            if (taskDTO.getPriority() != null) {
+                task.setPriority(taskDTO.getPriority());
+            }
+
+            if (taskDTO.getStatus() != null) {
+                task.setStatus(taskDTO.getStatus());
+            }
+
+            if (taskDTO.getDueDate() != null) {
+                task.setDueDate(taskDTO.getDueDate());
+            }
+            return taskRepository.save(task);
+        }).orElseThrow(() -> new EntityNotFoundException(""));
     }
 
     @Override

@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface AuthService {
     public User register(User user);
+
     public void login();
 }
