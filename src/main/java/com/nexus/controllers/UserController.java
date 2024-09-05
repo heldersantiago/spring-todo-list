@@ -25,13 +25,13 @@ public class UserController {
         return userService.getUsers();
     }
 
-    @GetMapping("/:id")
-    public Optional<User> getUser(@PathParam("id") Long id) {
+    @GetMapping("/{id}")
+    public Optional<User> getUser(@PathVariable("id") Long id) {
         return userService.getUserById(id);
     }
 
-    @DeleteMapping("/:id")
-    public void deleteUser(@PathParam("id") Long id) {
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
     }
 }

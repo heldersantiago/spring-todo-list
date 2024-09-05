@@ -30,13 +30,13 @@ public class TaskController {
         return taskService.getTasks();
     }
 
-    @GetMapping("/:id")
-    public Optional<Task> getTaskById(@PathParam("id") Long id) {
+    @GetMapping("/{id}")
+    public Optional<Task> getTaskById(@PathVariable("id") Long id) {
         return taskService.getTaskById(id);
     }
 
-    @DeleteMapping("/:id")
-    public void deleteTask(@PathParam("id") Long id) {
+    @DeleteMapping("/{id}")
+    public void deleteTask(@PathVariable("id") Long id) {
         taskService.deleteTask(id);
     }
 }
