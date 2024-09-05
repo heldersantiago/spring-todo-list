@@ -1,58 +1,68 @@
 package com.nexus.services;
 
+import com.nexus.dtos.TaskDTO;
+import com.nexus.entities.Category;
 import com.nexus.entities.Task;
 import com.nexus.exceptions.TaskNotFoundException;
 import com.nexus.interfaces.TaskService;
+import com.nexus.mappers.TaskMapper;
+import com.nexus.repositories.CategoryRepository;
 import com.nexus.repositories.TaskRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImp implements TaskService {
+
     @Autowired
     private final TaskRepository taskRepository;
 
-    public TaskServiceImp(TaskRepository taskRepository) {
+    @Autowired
+    private final CategoryRepository categoryRepository;
+
+    public TaskServiceImp(TaskRepository taskRepository, CategoryRepository categoryRepository) {
         this.taskRepository = taskRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
-    public Task createTask(Task task) {
-        return taskRepository.save(task);
+    public TaskDTO createTask(Task task) {
+        Task savedTask = taskRepository.save(task);
+        return TaskMapper.toDTO(savedTask);
     }
 
     @Override
-    public Optional<Task> getTaskById(Long id) throws TaskNotFoundException {
-        return Optional.ofNullable(taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Task Not Found")));
+    public TaskDTO getTaskById(Long id) throws TaskNotFoundException {
+        Task task = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Task Not Found"));
+        return TaskMapper.toDTO(task);
     }
 
     @Override
-    public Task updateTask(Long id, Task taskDTO) {
+    public TaskDTO updateTask(Long id, Task taskDTO) {
         return taskRepository.findById(id).map(task -> {
             if (taskDTO.getTitle() != null) {
                 task.setTitle(taskDTO.getTitle());
             }
-
             if (taskDTO.getDescription() != null) {
                 task.setDescription(taskDTO.getDescription());
             }
             if (taskDTO.getPriority() != null) {
                 task.setPriority(taskDTO.getPriority());
             }
-
             if (taskDTO.getStatus() != null) {
                 task.setStatus(taskDTO.getStatus());
             }
-
             if (taskDTO.getDueDate() != null) {
                 task.setDueDate(taskDTO.getDueDate());
             }
-            return taskRepository.save(task);
-        }).orElseThrow(() -> new EntityNotFoundException(""));
+            Task updatedTask = taskRepository.save(task);
+
+            return TaskMapper.toDTO(updatedTask);
+        }).orElseThrow(() -> new EntityNotFoundException("Task not found"));
     }
 
     @Override
@@ -60,7 +70,23 @@ public class TaskServiceImp implements TaskService {
         taskRepository.deleteById(id);
     }
 
-    public List<Task> getTasks() {
-        return taskRepository.findAll();
+    @Override
+    public TaskDTO assignCategoryToTask(Long taskId, Long categoryId) throws TaskNotFoundException {
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException("Task not found"));
+
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new EntityNotFoundException("Category not Found"));
+
+        task.setCategory(category);
+        Task updatedTask = taskRepository.save(task);
+
+        return TaskMapper.toDTO(updatedTask);
+    }
+
+    public List<TaskDTO> getTasks() {
+        return taskRepository.findAll().stream().map(TaskMapper::toDTO).collect(Collectors.toList());
+    }
+
+    public List<TaskDTO> getTasksByCategory(Long categoryId) {
+        return taskRepository.findByCategoryId(categoryId).stream().map(TaskMapper::toDTO).collect(Collectors.toList());
     }
 }

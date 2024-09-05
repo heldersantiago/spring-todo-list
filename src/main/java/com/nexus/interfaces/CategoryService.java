@@ -1,14 +1,15 @@
 package com.nexus.interfaces;
 
+import com.nexus.dtos.CategoryDTO;
 import com.nexus.entities.Category;
 
 import java.util.List;
 
 
 public interface CategoryService {
-    public List<Category> getCategories();
+    public List<CategoryDTO> getCategories();
 
-    public Category createCategory(Category category);
+    public CategoryDTO createCategory(Category category);
 
-    public Category getCategoryByID(Long id);
+    public CategoryDTO getCategoryByID(Long id);
 }

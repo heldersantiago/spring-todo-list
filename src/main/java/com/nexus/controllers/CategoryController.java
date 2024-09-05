@@ -1,5 +1,6 @@
 package com.nexus.controllers;
 
+import com.nexus.dtos.CategoryDTO;
 import com.nexus.entities.Category;
 import com.nexus.interfaces.CategoryService;
 import org.springframework.web.bind.annotation.*;
@@ -17,17 +18,17 @@ public class CategoryController {
 
 
     @PostMapping
-    public Category createCategory(@RequestBody Category category) {
+    public CategoryDTO createCategory(@RequestBody Category category) {
         return categoryService.createCategory(category);
     }
 
     @GetMapping
-    public List<Category> getCategories() {
+    public List<CategoryDTO> getCategories() {
         return categoryService.getCategories();
     }
 
     @GetMapping("/{id}")
-    public Category getCategoryById(@PathVariable("id") Long id) {
+    public CategoryDTO getCategoryById(@PathVariable("id") Long id) {
         return categoryService.getCategoryByID(id);
     }
 }

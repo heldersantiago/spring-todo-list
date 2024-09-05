@@ -9,6 +9,8 @@ import lombok.experimental.Tolerate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @ToString
@@ -19,6 +21,9 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
+
+    @OneToMany(mappedBy = "category")
+    private Set<Task> tasks;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

@@ -29,6 +29,9 @@ public class Task {
     private String description;
     private TaskPriority priority;
     private TaskStatus status;
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
     private Date dueDate;
 
     @CreationTimestamp
@@ -56,5 +59,14 @@ public class Task {
         this.dueDate = dueDate;
         this.priority = priority;
         this.status = status;
+    }
+
+    public Task(String title, String description, TaskPriority priority, TaskStatus status, Category category, Date dueDate) {
+        this.title = title;
+        this.description = description;
+        this.priority = priority;
+        this.status = status;
+        this.category = category;
+        this.dueDate = dueDate;
     }
 }
