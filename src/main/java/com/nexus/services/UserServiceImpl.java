@@ -2,6 +2,7 @@ package com.nexus.services;
 
 
 import com.nexus.entities.User;
+import com.nexus.exceptions.UserNotFoundException;
 import com.nexus.interfaces.UserService;
 import com.nexus.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -39,8 +40,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserById(Long id) {
-        return Optional.ofNullable(userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User Not found")
+    public Optional<User> getUserById(Long id) throws UserNotFoundException {
+        return Optional.ofNullable(userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User Not found")
         ));
     }
 

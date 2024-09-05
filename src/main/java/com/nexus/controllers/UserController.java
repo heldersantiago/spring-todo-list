@@ -2,6 +2,7 @@ package com.nexus.controllers;
 
 
 import com.nexus.entities.User;
+import com.nexus.exceptions.UserNotFoundException;
 import com.nexus.interfaces.UserService;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Optional<User> getUser(@PathVariable("id") Long id) {
+    public Optional<User> getUser(@PathVariable("id") Long id) throws UserNotFoundException {
         return userService.getUserById(id);
     }
 

@@ -1,6 +1,7 @@
 package com.nexus.services;
 
 import com.nexus.entities.Task;
+import com.nexus.exceptions.TaskNotFoundException;
 import com.nexus.interfaces.TaskService;
 import com.nexus.repositories.TaskRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,8 +26,8 @@ public class TaskServiceImp implements TaskService {
     }
 
     @Override
-    public Optional<Task> getTaskById(Long id) {
-        return taskRepository.findById(id);
+    public Optional<Task> getTaskById(Long id) throws TaskNotFoundException {
+        return Optional.ofNullable(taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Task Not Found")));
     }
 
     @Override

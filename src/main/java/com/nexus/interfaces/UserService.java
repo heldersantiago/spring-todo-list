@@ -1,6 +1,7 @@
 package com.nexus.interfaces;
 
 import com.nexus.entities.User;
+import com.nexus.exceptions.UserNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +9,7 @@ import java.util.Optional;
 public interface UserService {
     public List<User> getUsers();
 
-    public Optional<User> getUserById(Long id);
+    public Optional<User> getUserById(Long id) throws UserNotFoundException;
 
     public void deleteUser(Long id);
 

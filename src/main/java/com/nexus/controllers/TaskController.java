@@ -1,6 +1,7 @@
 package com.nexus.controllers;
 
 import com.nexus.entities.Task;
+import com.nexus.exceptions.TaskNotFoundException;
 import com.nexus.interfaces.TaskService;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Task> getTaskById(@PathVariable("id") Long id) {
+    public Optional<Task> getTaskById(@PathVariable("id") Long id) throws TaskNotFoundException {
         return taskService.getTaskById(id);
     }
 
