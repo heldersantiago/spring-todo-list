@@ -29,9 +29,11 @@ public class Task {
     private String description;
     private TaskPriority priority;
     private TaskStatus status;
+
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
     private Date dueDate;
 
     @CreationTimestamp

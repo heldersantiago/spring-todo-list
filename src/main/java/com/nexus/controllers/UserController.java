@@ -4,7 +4,6 @@ package com.nexus.controllers;
 import com.nexus.entities.User;
 import com.nexus.exceptions.UserNotFoundException;
 import com.nexus.interfaces.UserService;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

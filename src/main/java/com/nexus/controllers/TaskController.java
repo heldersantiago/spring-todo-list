@@ -5,6 +5,7 @@ import com.nexus.entities.Task;
 import com.nexus.exceptions.TaskNotFoundException;
 import com.nexus.interfaces.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
