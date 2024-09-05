@@ -3,6 +3,7 @@ package com.nexus.entities;
 import com.nexus.enums.TaskPriority;
 import com.nexus.enums.TaskStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -23,6 +24,7 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull(message = "title can not be null")
     private String title;
     private String description;
     private TaskPriority priority;

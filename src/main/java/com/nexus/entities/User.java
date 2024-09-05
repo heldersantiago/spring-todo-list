@@ -1,6 +1,8 @@
 package com.nexus.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,8 +19,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotNull(message = "name can not be null")
     private String name;
+    @NotNull(message = "email can not be null")
+    @Email(message = "insert a valid email")
     private String email;
+    @NotNull(message = "password can not be null")
     private String password;
 
     @CreationTimestamp
