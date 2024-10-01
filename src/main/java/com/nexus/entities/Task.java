@@ -4,6 +4,7 @@ import com.nexus.enums.TaskPriority;
 import com.nexus.enums.TaskStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,9 +17,7 @@ import java.util.Date;
 @Entity
 @Table(name = "tasks")
 @Slf4j
-@ToString
-@Setter
-@Getter
+@Data
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
