@@ -4,8 +4,6 @@ import com.nexus.dtos.CategoryDTO;
 import com.nexus.entities.Category;
 
 import java.util.List;
-
-
 public interface CategoryService {
     public List<CategoryDTO> getCategories();
 
