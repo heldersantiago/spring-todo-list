@@ -10,10 +10,12 @@ import com.nexus.repositories.TaskRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -23,19 +25,27 @@ public class TaskServiceImp implements TaskService {
     private final ModelMapper taskMapper = new ModelMapper();
 
     @Override
-    public TaskDTO createTask(Task task) {
-        Task savedTask = taskRepository.save(task);
-        return taskMapper.map(savedTask, TaskDTO.class);
+    public Iterable<Task> getAll(Sort sort) {
+        return null;
     }
 
     @Override
-    public TaskDTO getTaskById(Long id) {
-        Task task = taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task Not Found"));
-        return taskMapper.map(task, TaskDTO.class);
+    public Page<Task> getAll(Pageable pageable) {
+        return taskRepository.findAll(pageable);
     }
 
     @Override
-    public TaskDTO updateTask(Long id, Task taskDTO) {
+    public Task create(Task task) {
+        return taskRepository.save(task);
+    }
+
+    @Override
+    public Task getById(Long id) {
+        return taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task Not Found"));
+    }
+
+    @Override
+    public Task update(Long id, Task taskDTO) {
         return taskRepository.findById(id).map(task -> {
             if (taskDTO.getTitle() != null) {
                 task.setTitle(taskDTO.getTitle());
@@ -54,34 +64,26 @@ public class TaskServiceImp implements TaskService {
             }
             Task updatedTask = taskRepository.save(task);
 
-            return taskMapper.map(updatedTask, TaskDTO.class);
+            return task;
         }).orElseThrow(() -> new EntityNotFoundException("Task not found"));
     }
 
     @Override
-    public void deleteTask(Long id) {
+    public void delete(Long id) {
         Task task = taskRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
         taskRepository.delete(task);
     }
 
     @Override
-    public TaskDTO assignCategoryToTask(Long taskId, Long categoryId) {
+    public Task assignCategoryToTask(Long taskId, Long categoryId) {
         Task task = taskRepository.findById(taskId).orElseThrow(() -> new ResourceNotFoundException("Task not found"));
-
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new EntityNotFoundException("Category not Found"));
-
         task.setCategory(category);
-        Task updatedTask = taskRepository.save(task);
-
-        return taskMapper.map(updatedTask, TaskDTO.class);
+        return taskRepository.save(task);
     }
 
-    public List<TaskDTO> getTasks() {
-        return taskRepository.findAll().stream().map(task -> taskMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
-    }
-
-    public List<TaskDTO> getTasksByCategory(Long categoryId) {
+    public List<Task> getTasksByCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not Found"));
-        return taskRepository.findByCategoryId(categoryId).stream().map(task -> taskMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
+        return taskRepository.findByCategoryId(categoryId).stream().toList();
     }
 }

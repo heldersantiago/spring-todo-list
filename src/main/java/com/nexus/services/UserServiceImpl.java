@@ -7,10 +7,11 @@ import com.nexus.interfaces.UserService;
 import com.nexus.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -19,12 +20,27 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+    public Iterable<User> getAll(Sort sort) {
+        return null;
     }
 
     @Override
-    public User updateUser(Long id, User userDTO) {
+    public Page<User> getAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
+    @Override
+    public User getById(Long id) {
+        return userRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+    }
+
+    @Override
+    public User create(User user) {
+        return null;
+    }
+
+    @Override
+    public User update(Long id, User userDTO) {
         return userRepository.findById(id).map(user -> {
             if (userDTO.getName() != null) {
                 user.setName(userDTO.getName());
@@ -37,12 +53,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserById(Long id) throws ResourceNotFoundException {
-        return Optional.ofNullable(userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User Not found")));
+    public void delete(Long id) {
+        userRepository.deleteById(id);
     }
 
-    @Override
-    public List<User> getUsers() {
-        return userRepository.findAll();
-    }
 }
