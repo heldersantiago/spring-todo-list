@@ -1,0 +1,3 @@
+- Personalize the error response when creating a new category with a title that already exists
+- Handle the error response for Resource Not found
+- 

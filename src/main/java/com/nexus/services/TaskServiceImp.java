@@ -9,25 +9,20 @@ import com.nexus.mappers.TaskMapper;
 import com.nexus.repositories.CategoryRepository;
 import com.nexus.repositories.TaskRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 @Service
 public class TaskServiceImp implements TaskService {
-
-    @Autowired
     private final TaskRepository taskRepository;
-
-    @Autowired
     private final CategoryRepository categoryRepository;
-
-    public TaskServiceImp(TaskRepository taskRepository, CategoryRepository categoryRepository) {
-        this.taskRepository = taskRepository;
-        this.categoryRepository = categoryRepository;
-    }
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public TaskDTO createTask(Task task) {
