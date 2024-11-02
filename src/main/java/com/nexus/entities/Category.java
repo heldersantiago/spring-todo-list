@@ -1,17 +1,16 @@
 package com.nexus.entities;
+
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Tolerate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Set;
 
-@Getter
-@Setter
-@ToString
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "categories", uniqueConstraints = {@UniqueConstraint(columnNames = "title")})
 public class Category {
@@ -29,11 +28,4 @@ public class Category {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = true, updatable = true)
     private java.sql.Timestamp updatedAt;
-
-    public Category(String title) {
-        this.title = title;
-    }
-
-    public Category() {
-    }
 }

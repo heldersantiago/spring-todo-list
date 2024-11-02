@@ -9,46 +9,43 @@ import io.swagger.v3.oas.annotations.media.*;
 import io.swagger.v3.oas.annotations.responses.*;
 import lombok.AllArgsConstructor;
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @AllArgsConstructor
-@RestController
 @RequestMapping("/api/v1/tasks")
+@RestController
 public class TaskController {
     private final TaskService taskService;
-
-
-    @Operation(summary = "Create a task")
-    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Task created", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = AbstractReadWriteAccess.Item.class))}), @ApiResponse(responseCode = "400", description = "Bad request"),})
-    @PostMapping
-    public TaskDTO createTask(@RequestBody Task task) {
-        return taskService.createTask(task);
-    }
+    private final ModelMapper taskMapper = new ModelMapper();
 
     @Operation(summary = "Get all tasks")
     @ApiResponses(value = {@ApiResponse(responseCode = "200")})
     @GetMapping
-    public List<TaskDTO> getTasks() {
-        return taskService.getTasks();
+    public ResponseEntity<List<TaskDTO>> getTasks() {
+        return ResponseEntity.ok(taskService.getTasks());
+    }
+
+    @PostMapping
+    public ResponseEntity<TaskDTO> createTask(@RequestBody TaskDTO taskDTO) {
+        return ResponseEntity.ok(taskService.createTask(taskMapper.map(taskDTO, Task.class)));
     }
 
     @Operation(summary = "Get a task by its ID")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Task Found", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = AbstractReadWriteAccess.Item.class))}), @ApiResponse(responseCode = "400", description = "Bad Request"), @ApiResponse(responseCode = "404", description = "Task not found")})
     @GetMapping("/{id}")
-    public TaskDTO getTaskById(@PathVariable("id") Long id) throws TaskNotFoundException {
-        return taskService.getTaskById(id);
+    public ResponseEntity<TaskDTO> getTaskById(@PathVariable("id") Long id) throws TaskNotFoundException {
+        return ResponseEntity.ok(taskService.getTaskById(id));
     }
-
 
     @Operation(summary = "Update a task")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Task updated", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = AbstractReadWriteAccess.Item.class))}), @ApiResponse(responseCode = "400", description = "Bad Request"), @ApiResponse(responseCode = "404", description = "Task not found")})
     @PatchMapping("/{id}")
-    public TaskDTO updateTask(@PathVariable("id") Long id, @RequestBody Task task) {
-        return taskService.updateTask(id, task);
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable("id") Long id, @RequestBody Task task) {
+        return ResponseEntity.ok(taskService.updateTask(id, task));
     }
 
     @Operation(summary = "Delete a task")

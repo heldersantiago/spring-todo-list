@@ -4,14 +4,12 @@ import com.nexus.dtos.CategoryDTO;
 import com.nexus.entities.Category;
 import com.nexus.interfaces.CategoryService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @AllArgsConstructor
-@RestController
 @RequestMapping("/api/v1/categories")
+@RestController
 public class CategoryController {
     private final CategoryService categoryService;
 

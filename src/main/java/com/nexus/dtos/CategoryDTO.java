@@ -1,20 +1,11 @@
 package com.nexus.dtos;
+import lombok.*;
 
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
-@Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class CategoryDTO {
     private Long id;
     private String title;
-
-    // Constructor
-    public CategoryDTO(Long id, String name) {
-        this.id = id;
-        this.title = name;
-    }
 }
 
