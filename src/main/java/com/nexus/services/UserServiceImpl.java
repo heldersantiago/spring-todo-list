@@ -2,24 +2,21 @@ package com.nexus.services;
 
 
 import com.nexus.entities.User;
-import com.nexus.exceptions.UserNotFoundException;
+import com.nexus.exceptions.ResourceNotFoundException;
 import com.nexus.interfaces.UserService;
 import com.nexus.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@AllArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
     private final UserRepository userRepository;
-
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public void deleteUser(Long id) {
@@ -40,8 +37,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserById(Long id) throws UserNotFoundException {
-        return Optional.ofNullable(userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User Not found")));
+    public Optional<User> getUserById(Long id) throws ResourceNotFoundException {
+        return Optional.ofNullable(userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User Not found")));
     }
 
     @Override

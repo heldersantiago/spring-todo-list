@@ -3,9 +3,8 @@ package com.nexus.services;
 import com.nexus.dtos.TaskDTO;
 import com.nexus.entities.Category;
 import com.nexus.entities.Task;
-import com.nexus.exceptions.TaskNotFoundException;
+import com.nexus.exceptions.ResourceNotFoundException;
 import com.nexus.interfaces.TaskService;
-import com.nexus.mappers.TaskMapper;
 import com.nexus.repositories.CategoryRepository;
 import com.nexus.repositories.TaskRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,8 +29,8 @@ public class TaskServiceImp implements TaskService {
     }
 
     @Override
-    public TaskDTO getTaskById(Long id) throws TaskNotFoundException {
-        Task task = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Task Not Found"));
+    public TaskDTO getTaskById(Long id) {
+        Task task = taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task Not Found"));
         return taskMapper.map(task, TaskDTO.class);
     }
 
@@ -61,12 +60,13 @@ public class TaskServiceImp implements TaskService {
 
     @Override
     public void deleteTask(Long id) {
-        taskRepository.deleteById(id);
+        Task task = taskRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        taskRepository.delete(task);
     }
 
     @Override
-    public TaskDTO assignCategoryToTask(Long taskId, Long categoryId) throws TaskNotFoundException {
-        Task task = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException("Task not found"));
+    public TaskDTO assignCategoryToTask(Long taskId, Long categoryId) {
+        Task task = taskRepository.findById(taskId).orElseThrow(() -> new ResourceNotFoundException("Task not found"));
 
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new EntityNotFoundException("Category not Found"));
 
@@ -81,6 +81,7 @@ public class TaskServiceImp implements TaskService {
     }
 
     public List<TaskDTO> getTasksByCategory(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not Found"));
         return taskRepository.findByCategoryId(categoryId).stream().map(task -> taskMapper.map(task, TaskDTO.class)).collect(Collectors.toList());
     }
 }
