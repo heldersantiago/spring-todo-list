@@ -2,23 +2,18 @@ package com.nexus.controllers;
 
 
 import com.nexus.entities.User;
-import com.nexus.exceptions.UserNotFoundException;
 import com.nexus.interfaces.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
-    @Autowired
     private final UserService userService;
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @GetMapping
     public List<User> getUsers() {
@@ -26,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Optional<User> getUser(@PathVariable("id") Long id) throws UserNotFoundException {
+    public Optional<User> getUser(@PathVariable("id") Long id) {
         return userService.getUserById(id);
     }
 

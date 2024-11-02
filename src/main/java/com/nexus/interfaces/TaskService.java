@@ -2,7 +2,7 @@ package com.nexus.interfaces;
 
 import com.nexus.dtos.TaskDTO;
 import com.nexus.entities.Task;
-import com.nexus.exceptions.TaskNotFoundException;
+import com.nexus.exceptions.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -11,13 +11,13 @@ public interface TaskService {
 
     public List<TaskDTO> getTasks();
 
-    public TaskDTO getTaskById(Long id) throws TaskNotFoundException;
+    public TaskDTO getTaskById(Long id);
 
     public TaskDTO updateTask(Long id, Task task);
 
     public void deleteTask(Long id);
 
-    public TaskDTO assignCategoryToTask(Long taskId, Long categoryId) throws TaskNotFoundException;
+    public TaskDTO assignCategoryToTask(Long taskId, Long categoryId);
 
     public List<TaskDTO> getTasksByCategory(Long categoryId);
 }
